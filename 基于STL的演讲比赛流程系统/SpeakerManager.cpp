@@ -1,8 +1,5 @@
 #include"SpeakerManager.h"
 
-string FIRST_NAME = "赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨";
-string MID_NAME = "伯仲叔季大二三小甲乙丙丁子丑寅卯";
-string LAST_NAME = "杰婕洁捷冰炳楠囡雨予丹儋擅缮林麟";
 
 SpeakerManager::SpeakerManager()
 {
@@ -38,14 +35,48 @@ void SpeakerManager::exitMenu()
 //创建选手函数
 void SpeakerManager::createSpeaker()
 {
+	//确保容器中为空
+	vectorSpeaker.clear();
+	vectorUpperSpeaker.clear();
+	vectorWinSpeaker.clear();
+	mapSpeaker.clear();
+
+	//宏定义默认分数
+	double defaultScore[] { 0 , 0 };
+
 	//创建选手并填入容器中
 	for (int i = 0; i < 12; i++)
 	{
-		double score[] = { 0 , 0 };
-		Speaker p("选手", score);
-	}
-	
+		//初始化选手
+		Speaker s("", defaultScore);
+		
+		//为选手分配编号与名字
+		int randNum = rand() % 16;
+		s.s_name += FIRST_NAME[randNum * 2];
+		s.s_name += FIRST_NAME[randNum * 2 + 1];
+		randNum = rand() % 16;
+		s.s_name += MID_NAME[randNum * 2];
+		s.s_name += MID_NAME[randNum * 2 + 1];
+		randNum = rand() % 16;
+		s.s_name += LAST_NAME[randNum * 2];
+		s.s_name += LAST_NAME[randNum * 2 + 1];
 
+		//将选手的编号装填进vector容器中
+		vectorSpeaker.push_back(i);
+
+		//将选手编号和选手装填进pair中
+		pair<int, Speaker>p(i, s);
+
+		//将pair装填进map容器中
+		mapSpeaker.insert(p);
+		cout << mapSpeaker.at(i).s_name << endl;
+	}
+}
+
+//展示选手信息函数
+void showInfo()
+{
+	
 }
 
 

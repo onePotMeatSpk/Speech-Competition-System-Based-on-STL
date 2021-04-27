@@ -22,9 +22,11 @@ int main()
 			//选择0:退出系统
 		case 0:
 			sm.exitMenu();
-
+			break;
 			//选择1：开始演讲比赛
-		
+		case 1:
+			sm.createSpeaker();
+			break;
 			//选择2：查拉往届记录
 
 			//选择3：清空比赛记录
