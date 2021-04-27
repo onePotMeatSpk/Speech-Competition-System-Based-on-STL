@@ -2,7 +2,11 @@
 #include<iostream>
 #include<vector>
 #include<map>
-#include<stdlib.h>
+#include<deque>
+#include<ctime>
+#include<cstdlib>
+#include<algorithm>
+#include<numeric>
 #include"Speaker.h"
 using namespace std;
 
@@ -19,6 +23,9 @@ public:
 	SpeakerManager();
 	~SpeakerManager();
 
+	//初始化系统函数
+	void initSystem();
+
 	//显示主界面函数
 	void showMenu();
 
@@ -28,21 +35,43 @@ public:
 	//创建员工函数
 	void createSpeaker();
 
+	//抽签分组函数
+	void setGroup();
+
+	//单个打分函数
+	double setSingleScore();
+
+	//全员打分函数
+	void setAllScore();
+
+
+
 	//展示选手信息函数
 	void showInfo();
 
 public:
 
-	//创建一个装载所有选手编号的容器
+	//装载所有选手编号的容器
 	vector<int>vectorSpeaker;
 
-	//创建一个装载晋级选手编号的容器
+	//装载一组选手编号的容器
+	vector<int>vectorSpeaker1;
+
+	//装载二组选手编号的容器
+	vector<int>vectorSpeaker2;
+
+	//装载晋级选手编号的容器
 	vector<int>vectorUpperSpeaker;
 
-	//创建一个装载胜利选手编号的容器
+	//装载胜利选手编号的容器
 	vector<int>vectorWinSpeaker;
 
-	//创建一个装载所有选手编号和选手的容器
+	//装载所有选手编号和选手的容器
 	map<int, Speaker>mapSpeaker;
 
+	//当前比赛轮数
+	int roundNum;
+
+	//创建打分表
+	deque<double>dequeScore;
 };

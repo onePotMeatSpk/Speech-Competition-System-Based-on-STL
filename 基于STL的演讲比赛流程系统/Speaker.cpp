@@ -2,6 +2,9 @@
 
 Speaker::Speaker()
 {
+	this->s_name = "";
+	this->s_score[0] = 0;
+	this->s_score[1] = 0;
 }
 
 Speaker::~Speaker()
