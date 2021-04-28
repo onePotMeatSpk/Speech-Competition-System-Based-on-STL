@@ -81,6 +81,8 @@ void SpeakerManager::createSpeaker()
 		//将pair装填进map容器中
 		mapSpeaker.insert(p);
 	}
+
+	
 }
 
 //抽签分组函数
@@ -88,19 +90,21 @@ void SpeakerManager::setGroup()
 {
 	if (roundNum == 1)
 	{
+		vectorSpeaker1.resize(6);
+		vectorSpeaker2.resize(6);
 		random_shuffle(vectorSpeaker.begin(), vectorSpeaker.end());
-		copy(vectorSpeaker.begin(), vectorSpeaker.begin() + 6, vectorSpeaker1.begin());
+		copy(vectorSpeaker.begin(), vectorSpeaker.begin() +6, vectorSpeaker1.begin());
 		copy(vectorSpeaker.begin() + 6, vectorSpeaker.end(), vectorSpeaker2.begin());
 	}
 	else
 	{
 		random_shuffle(vectorUpperSpeaker.begin(), vectorUpperSpeaker.end());
 	}
-	
 
+	
 }
 
-//单个打分函数
+//单个选手打分函数
 double SpeakerManager::setSingleScore()
 {
 	dequeScore.clear();//清空打分表
@@ -119,56 +123,140 @@ double SpeakerManager::setSingleScore()
 void SpeakerManager::setAllScore()
 {
 	multimap<double, int, greater<double>>mapBuffer;
+	
 	if (roundNum == 1)//第一轮比赛打分
 	{
+		vectorUpperSpeaker.clear();
 		//第一组打分
 		mapBuffer.clear();
-		for (vector<int>::iterator it_vectorSpeaker = vectorSpeaker1.begin(); 
-			it_vectorSpeaker != vectorSpeaker1.end(); it_vectorSpeaker++)
+		for (vector<int>::iterator it = vectorSpeaker1.begin(); 
+			it != vectorSpeaker1.end(); it++)
 		{
 				//将分数载入选手信息中
-				mapSpeaker.at(*it_vectorSpeaker).s_score[0] = setSingleScore();
+				mapSpeaker.at(*it).s_score[0] = setSingleScore();
 
-				//晋级
-				mapBuffer.insert(make_pair(mapSpeaker.at(*it_vectorSpeaker).s_score[0], *it_vectorSpeaker));
-				for (multimap<double, int, greater<double>>::iterator it_mapBuffer=mapBuffer.begin(),int index_mapBuffer=0;
-					index_mapBuffer<3&& it_mapBuffer!=mapBuffer.end(); it_mapBuffer++,index_mapBuffer++)
-				{
-					vectorUpperSpeaker.push_back(it_mapBuffer->second);
-				}
+				mapBuffer.insert(make_pair(mapSpeaker.at(*it).s_score[0], *it));
+				
 		}
+		//晋级
+		int index_mapBuffer = 0;
+		for (multimap<double, int, greater<double>>::iterator it_mapBuffer = mapBuffer.begin(); index_mapBuffer < 3 && it_mapBuffer != mapBuffer.end(); it_mapBuffer++)
+		{
+			vectorUpperSpeaker.push_back(it_mapBuffer->second);
+			index_mapBuffer++;
+		}
+
+
 		//第二组打分
 		mapBuffer.clear();
-		for (vector<int>::iterator it_vectorSpeaker = vectorSpeaker2.begin();
-			it_vectorSpeaker != vectorSpeaker2.end(); it_vectorSpeaker++)
+		for (vector<int>::iterator it = vectorSpeaker2.begin();it != vectorSpeaker2.end(); it++)
 		{
 			//将分数载入选手信息中
-			mapSpeaker.at(*it_vectorSpeaker).s_score[0] = setSingleScore();
+			mapSpeaker.at(*it).s_score[0] = setSingleScore();
 
-			//晋级
-			mapBuffer.insert(make_pair(mapSpeaker.at(*it_vectorSpeaker).s_score[0], *it_vectorSpeaker));
-			for (multimap<double, int, greater<double>>::iterator it_mapBuffer = mapBuffer.begin(), int index_mapBuffer = 0;
-				index_mapBuffer < 3 && it_mapBuffer != mapBuffer.end(); it_mapBuffer++, index_mapBuffer++)
-			{
-				vectorUpperSpeaker.push_back(it_mapBuffer->second);
-			}
+			
+			mapBuffer.insert(make_pair(mapSpeaker.at(*it).s_score[0], *it));
+			
 		}
+		//晋级
+		index_mapBuffer = 0;
+		for (multimap<double, int, greater<double>>::iterator it_mapBuffer = mapBuffer.begin(); index_mapBuffer < 3 && it_mapBuffer != mapBuffer.end(); it_mapBuffer++)
+		{
+			vectorUpperSpeaker.push_back(it_mapBuffer->second);
+			index_mapBuffer++;
+		}
+
 
 	}
 	else//第二轮比赛打分
 	{
+		vectorWinSpeaker.clear();
+		mapBuffer.clear();
 		for (vector<int>::iterator it = vectorUpperSpeaker.begin(); it != vectorUpperSpeaker.end(); it++)
 		{
 			mapSpeaker.at(*it).s_score[1] = setSingleScore();
+
+			//晋级
+			mapBuffer.insert(make_pair(mapSpeaker.at(*it).s_score[1], *it));
+			
+		}
+		int index_mapBuffer = 0;
+		for (multimap<double, int, greater<double>>::iterator it_mapBuffer = mapBuffer.begin(); index_mapBuffer < 3 && it_mapBuffer != mapBuffer.end(); it_mapBuffer++)
+		{
+			vectorWinSpeaker.push_back(it_mapBuffer->second);
+			index_mapBuffer++;
 		}
 	}
 }
 
 
-
 //展示选手信息函数
 void SpeakerManager::showInfo()
 {
+	if (roundNum==1)
+	{
+		cout << "************第一轮比赛结果************" << endl;
+		cout << "****第一组****" << endl;
+		for (vector<int>::iterator it = vectorSpeaker1.begin();
+			it != vectorSpeaker1.end(); it++)
+		{
+			cout << mapSpeaker.at(*it).s_name << ": " << mapSpeaker.at(*it).s_score[0] << " ";
+			if (find(vectorUpperSpeaker.begin(),vectorUpperSpeaker.end(),*it)!=vectorUpperSpeaker.end())
+			{
+				cout << "该选手晋级" << endl;
+			}
+			else
+			{
+				cout << endl;
+			}
+		}
 
+		cout << "****第二组****" << endl;
+		for (vector<int>::iterator it = vectorSpeaker2.begin();
+			it != vectorSpeaker2.end(); it++)
+		{
+			cout << mapSpeaker.at(*it).s_name << ": " << mapSpeaker.at(*it).s_score[0] << " ";
+			if (find(vectorUpperSpeaker.begin(), vectorUpperSpeaker.end(), *it) != vectorUpperSpeaker.end())
+			{
+				cout << "该选手晋级" << endl;
+			}
+			else
+			{
+				cout << endl;
+			}
+		}
+	}
+	else
+	{
+		cout << "************第二轮比赛结果************" << endl;
+		for (vector<int>::iterator it = vectorUpperSpeaker.begin();
+			it != vectorUpperSpeaker.end(); it++)
+		{
+			cout << mapSpeaker.at(*it).s_name << ": " << mapSpeaker.at(*it).s_score[1] << " ";
+			if (find(vectorWinSpeaker.begin(), vectorWinSpeaker.end(), *it) != vectorWinSpeaker.end())
+			{
+				cout << "该选手获胜" << endl;
+			}
+			else
+			{
+				cout << endl;
+			}
+		}
+	}
+}
+
+
+//进行比赛函数
+void SpeakerManager::runCompetition()
+{
+	this->roundNum = 1;
+	this->createSpeaker();
+	this->setGroup();
+	this->setAllScore();
+	this->showInfo();
+	this->roundNum = 2;
+	this->setGroup();
+	this->setAllScore();
+	this->showInfo();
 }
 

@@ -7,6 +7,7 @@ int main()
 	//初始化系统
 	SpeakerManager sm;
 	int choice;
+	srand((unsigned int)time(NULL));
 
 	while (true)
 	{
@@ -25,7 +26,7 @@ int main()
 			break;
 			//选择1：开始演讲比赛
 		case 1:
-			sm.createSpeaker();
+			sm.runCompetition();
 			break;
 			//选择2：查拉往届记录
 
@@ -38,6 +39,5 @@ int main()
 			break;
 		}
 		
-
 	}
 }

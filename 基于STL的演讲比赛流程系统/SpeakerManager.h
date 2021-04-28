@@ -38,16 +38,17 @@ public:
 	//抽签分组函数
 	void setGroup();
 
-	//单个打分函数
+	//单个选手打分函数
 	double setSingleScore();
 
-	//全员打分函数
+	//全员打分晋级函数
 	void setAllScore();
-
-
 
 	//展示选手信息函数
 	void showInfo();
+
+	//进行比赛函数
+	void runCompetition();
 
 public:
 
